@@ -7,6 +7,7 @@ import BackEnd.Objects.List.NodeList;
 import BackEnd.Reports.Report;
 import BackEnd.Reports.ReportManager;
 import BackEnd.Reports.ReportStatus;
+import BackEnd.Utilities.CSVExporter;
 import BackEnd.Utilities.FileAnalyzer;
 import BackEnd.Utilities.Sorter;
 
@@ -37,6 +38,11 @@ public class MainViewController {
         if (!this.bets.isEmpty()) {
             ReportStatus tmp = this.betChecker.validateBets(this.bets);
             this.reportManager.addReport(new Report(this.betChecker.getTime(), this.betChecker.getSteps(), this.betChecker.getRealSteps(), ReportStatus.VALIDATE_BETS));
+            // export no valids to CSV
+            if (tmp == ReportStatus.SOME_BETS_INVALID) {
+                CSVExporter csvE = new CSVExporter();
+                csvE.exportInvalidBets(this.bets);
+            }
             return tmp;
         } else {
             return ReportStatus.LIST_EMPTY;
@@ -79,8 +85,9 @@ public class MainViewController {
     }
 
     public ReportStatus processRace(ReportStatus sort, int[] horsesPodium) {
-        if (validateBets() == ReportStatus.SUCCESS) {// verify bets
-            ReportStatus status = this.betCalculator.calculate(this.bets, horsesPodium);
+        ReportStatus status = validateBets();
+        if (status == ReportStatus.SUCCESS || status == ReportStatus.SOME_BETS_INVALID) {// verify bets
+            status = this.betCalculator.calculate(this.bets, horsesPodium);
             if (status == ReportStatus.SUCCESS) { // calculate points
                 status = sortBets(sort);
                 if (status == ReportStatus.SUCCESS) { // well sorted
@@ -107,6 +114,10 @@ public class MainViewController {
 
     public ReportManager getReportManager() {
         return reportManager;
+    }
+
+    public NodeList<Bet> getBets() {
+        return this.bets;
     }
 
 }

@@ -7,8 +7,6 @@ package FrontEnd;
 
 import BackEnd.Objects.Bet;
 import BackEnd.Objects.Gambler;
-import BackEnd.Objects.List.NodeList;
-import BackEnd.Reports.Report;
 import BackEnd.Reports.ReportStatus;
 import Controller.MainViewController;
 import java.awt.HeadlessException;
@@ -680,7 +678,9 @@ public class MainView1 extends javax.swing.JFrame {
                 if (status == ReportStatus.SUCCESS) {
                     // redirect to new view with results
                     // open a new view with the results
-                    RaceResults rr = new RaceResults();
+                    RaceResults rr = new RaceResults(this.controller.getBets(), this.controller.getReportManager(), sortBy);
+                    rr.setLocationRelativeTo(null);
+                    rr.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
                     rr.setVisible(true);
                 } else {
                     showMessage(status);
@@ -810,8 +810,11 @@ public class MainView1 extends javax.swing.JFrame {
             case FILE_NOT_FOUND -> {
                 JOptionPane.showMessageDialog(null, "El archivo seleccionado no existe", "ARCHIVO", JOptionPane.PLAIN_MESSAGE);
             }
+            case SOME_BETS_INVALID -> {
+                JOptionPane.showMessageDialog(null, "Se han validado las apuestas pero algunas apuestas han sido invalidas", "APUESTAS", JOptionPane.WARNING_MESSAGE);
+            }
             default -> {
-                JOptionPane.showMessageDialog(null, "Ha ocurrido un error al intentar procesar la solicitud", "DESCONOCIDO", JOptionPane.ERROR);
+                JOptionPane.showMessageDialog(null, "Ha ocurrido un error al intentar procesar la solicitud", "DESCONOCIDO", JOptionPane.ERROR_MESSAGE);
             }
         }
 

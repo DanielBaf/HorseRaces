@@ -32,9 +32,12 @@ public class FileAnalyzer {
         try {
             Gambler gambler = new Gambler(data[0].trim()); // always the 1st val is the name
             Double ammount = Double.valueOf(data[1].trim()); // always the 2nd val is the ammount
-            int[] horses = new int[data.length - 2]; // there must be 10 horses\
+            int[] horses = new int[10]; // there must be 10 horses\
             for (int i = 0; i < data.length - 2; i++) {
-                horses[i] = Integer.valueOf(data[i + 2].trim());
+                try {
+                    horses[i] = Integer.valueOf(data[i + 2].trim());
+                } catch (Exception e) {
+                }
             }
             list.addAtHead(new Bet(gambler, ammount, horses));
         } catch (Exception e) {

@@ -35,6 +35,7 @@ public class BetChecker {
     public ReportStatus validateBets(NodeList<Bet> bets) {
         // varibales
         resetSteps();
+        int noValids = 0;
         boolean error = false;
         Node<Bet> current = bets.getTail();
         while (current != null) {
@@ -46,9 +47,13 @@ public class BetChecker {
                 // save valid info
                 if (current.getData().getHorses().length != 10 || current.getData().getAmount() < 0) {
                     current.getData().setValid(false);
+                    noValids++;
                     addRealSteps(1);
                 } else {
                     current.getData().setValid(this.repeatValidator.isNumRepeat(current.getData().getHorses()));
+                    if (!current.getData().isValid()) {
+                        noValids++;
+                    }
                     addRealSteps(1);
                 }
                 // add values to promedium
@@ -56,7 +61,6 @@ public class BetChecker {
                 this.time += this.timer.getTotalTime();
                 addSteps(this.repeatValidator.getSteps(), this.repeatValidator.getRealSteps() + 7);
             } catch (Exception e) {
-                System.out.println("Error: " + e.getMessage());
                 error = true;
                 addRealSteps(1);
             }
@@ -66,7 +70,7 @@ public class BetChecker {
         this.time = this.time / bets.getSize();
         this.steps = this.steps / bets.getSize();
         this.realSteps = this.realSteps / bets.getSize();
-        return error ? ReportStatus.FAILURE : ReportStatus.SUCCESS;
+        return error ? ReportStatus.FAILURE : (noValids > 0 ? ReportStatus.SOME_BETS_INVALID : ReportStatus.SUCCESS);
     }
 
     public long getTime() {

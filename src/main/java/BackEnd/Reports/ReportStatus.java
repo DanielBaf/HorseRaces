@@ -20,5 +20,6 @@ public enum ReportStatus {
     SORT_BY_NAME,
     SORT_BY_POINTS,
     SORT_LOW_TO_HIGH,
-    SORT_HIGH_TO_LOW
+    SORT_HIGH_TO_LOW,
+    SOME_BETS_INVALID
 }

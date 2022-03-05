@@ -5,17 +5,34 @@
  */
 package FrontEnd;
 
+import BackEnd.Objects.Bet;
+import BackEnd.Objects.List.Node;
+import BackEnd.Objects.List.NodeList;
+import BackEnd.Reports.Report;
+import BackEnd.Reports.ReportManager;
+import BackEnd.Reports.ReportStatus;
+import javax.swing.DefaultListModel;
+import javax.swing.table.DefaultTableModel;
+
 /**
  *
  * @author jefemayoneso
  */
 public class RaceResults extends javax.swing.JFrame {
 
+    private final ReportManager manager;
+    private final NodeList<Bet> bets;
+
     /**
      * Creates new form RaceResults
      */
-    public RaceResults() {
+    public RaceResults(NodeList<Bet> bets, ReportManager manager, ReportStatus sorting) {
         initComponents();
+        this.bets = bets;
+        this.manager = manager;
+
+        showTableResult(sorting);
+        showReports();
     }
 
     /**
@@ -27,57 +44,237 @@ public class RaceResults extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        jPanel1 = new javax.swing.JPanel();
+        panelResultsContainer = new javax.swing.JPanel();
         jPanel2 = new javax.swing.JPanel();
+        jPanel4 = new javax.swing.JPanel();
+        labelResults = new javax.swing.JLabel();
+        jPanel5 = new javax.swing.JPanel();
+        jScrollPane1 = new javax.swing.JScrollPane();
+        tableRaceResults = new javax.swing.JTable();
+        jButton1 = new javax.swing.JButton();
+        panelReportSection = new javax.swing.JPanel();
+        jPanel1 = new javax.swing.JPanel();
+        jScrollPane2 = new javax.swing.JScrollPane();
+        listVerifyReport = new javax.swing.JList<>();
         jPanel3 = new javax.swing.JPanel();
+        jScrollPane3 = new javax.swing.JScrollPane();
+        listCalcReport = new javax.swing.JList<>();
+        jPanel6 = new javax.swing.JPanel();
+        jScrollPane4 = new javax.swing.JScrollPane();
+        listSortReport = new javax.swing.JList<>();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
-        jPanel1.setLayout(new java.awt.GridLayout());
+        jPanel4.setLayout(new java.awt.CardLayout());
+
+        labelResults.setText("RESULTADOS");
+        jPanel4.add(labelResults, "card2");
+
+        tableRaceResults.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+
+            },
+            new String [] {
+                "Nombre", "Puntos", "C1", "C2", "C3", "C4", "C5", "C6", "C7", "C8", "C9", "C10"
+            }
+        ) {
+            Class[] types = new Class [] {
+                java.lang.String.class, java.lang.Float.class, java.lang.Integer.class, java.lang.Integer.class, java.lang.Integer.class, java.lang.Integer.class, java.lang.Integer.class, java.lang.Integer.class, java.lang.Integer.class, java.lang.Integer.class, java.lang.Integer.class, java.lang.Integer.class
+            };
+
+            public Class getColumnClass(int columnIndex) {
+                return types [columnIndex];
+            }
+        });
+        jScrollPane1.setViewportView(tableRaceResults);
+        if (tableRaceResults.getColumnModel().getColumnCount() > 0) {
+            tableRaceResults.getColumnModel().getColumn(2).setResizable(false);
+            tableRaceResults.getColumnModel().getColumn(2).setPreferredWidth(28);
+            tableRaceResults.getColumnModel().getColumn(3).setResizable(false);
+            tableRaceResults.getColumnModel().getColumn(3).setPreferredWidth(28);
+            tableRaceResults.getColumnModel().getColumn(4).setResizable(false);
+            tableRaceResults.getColumnModel().getColumn(4).setPreferredWidth(28);
+            tableRaceResults.getColumnModel().getColumn(5).setResizable(false);
+            tableRaceResults.getColumnModel().getColumn(5).setPreferredWidth(28);
+            tableRaceResults.getColumnModel().getColumn(6).setResizable(false);
+            tableRaceResults.getColumnModel().getColumn(6).setPreferredWidth(28);
+            tableRaceResults.getColumnModel().getColumn(7).setResizable(false);
+            tableRaceResults.getColumnModel().getColumn(7).setPreferredWidth(28);
+            tableRaceResults.getColumnModel().getColumn(8).setResizable(false);
+            tableRaceResults.getColumnModel().getColumn(8).setPreferredWidth(28);
+            tableRaceResults.getColumnModel().getColumn(9).setResizable(false);
+            tableRaceResults.getColumnModel().getColumn(9).setPreferredWidth(28);
+            tableRaceResults.getColumnModel().getColumn(10).setResizable(false);
+            tableRaceResults.getColumnModel().getColumn(10).setPreferredWidth(28);
+            tableRaceResults.getColumnModel().getColumn(11).setResizable(false);
+            tableRaceResults.getColumnModel().getColumn(11).setPreferredWidth(28);
+        }
+
+        jButton1.setText("EXPORTAR");
+
+        javax.swing.GroupLayout jPanel5Layout = new javax.swing.GroupLayout(jPanel5);
+        jPanel5.setLayout(jPanel5Layout);
+        jPanel5Layout.setHorizontalGroup(
+            jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel5Layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jScrollPane1)
+                .addContainerGap())
+            .addGroup(jPanel5Layout.createSequentialGroup()
+                .addGap(382, 382, 382)
+                .addComponent(jButton1)
+                .addContainerGap(399, Short.MAX_VALUE))
+        );
+        jPanel5Layout.setVerticalGroup(
+            jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel5Layout.createSequentialGroup()
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 305, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jButton1)
+                .addGap(0, 12, Short.MAX_VALUE))
+        );
 
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
         jPanel2Layout.setHorizontalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 464, Short.MAX_VALUE)
+            .addComponent(jPanel4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
+                .addContainerGap(15, Short.MAX_VALUE)
+                .addComponent(jPanel5, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap())
         );
         jPanel2Layout.setVerticalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 644, Short.MAX_VALUE)
+            .addGroup(jPanel2Layout.createSequentialGroup()
+                .addComponent(jPanel4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jPanel5, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addContainerGap())
         );
 
-        jPanel1.add(jPanel2);
-
-        javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
-        jPanel3.setLayout(jPanel3Layout);
-        jPanel3Layout.setHorizontalGroup(
-            jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 464, Short.MAX_VALUE)
+        javax.swing.GroupLayout panelResultsContainerLayout = new javax.swing.GroupLayout(panelResultsContainer);
+        panelResultsContainer.setLayout(panelResultsContainerLayout);
+        panelResultsContainerLayout.setHorizontalGroup(
+            panelResultsContainerLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(panelResultsContainerLayout.createSequentialGroup()
+                .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap())
         );
-        jPanel3Layout.setVerticalGroup(
-            jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 644, Short.MAX_VALUE)
+        panelResultsContainerLayout.setVerticalGroup(
+            panelResultsContainerLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
         );
 
-        jPanel1.add(jPanel3);
+        panelReportSection.setLayout(new java.awt.GridLayout(1, 0));
+
+        jPanel1.setLayout(new javax.swing.BoxLayout(jPanel1, javax.swing.BoxLayout.LINE_AXIS));
+
+        jScrollPane2.setViewportView(listVerifyReport);
+
+        jPanel1.add(jScrollPane2);
+
+        panelReportSection.add(jPanel1);
+
+        jPanel3.setLayout(new java.awt.CardLayout());
+
+        jScrollPane3.setViewportView(listCalcReport);
+
+        jPanel3.add(jScrollPane3, "card2");
+
+        panelReportSection.add(jPanel3);
+
+        jPanel6.setLayout(new java.awt.CardLayout());
+
+        jScrollPane4.setViewportView(listSortReport);
+
+        jPanel6.add(jScrollPane4, "card2");
+
+        panelReportSection.add(jPanel6);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addComponent(panelResultsContainer, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addGroup(layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(panelReportSection, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addContainerGap())
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addGroup(layout.createSequentialGroup()
+                .addComponent(panelResultsContainer, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(panelReportSection, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton jButton1;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
+    private javax.swing.JPanel jPanel4;
+    private javax.swing.JPanel jPanel5;
+    private javax.swing.JPanel jPanel6;
+    private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JScrollPane jScrollPane2;
+    private javax.swing.JScrollPane jScrollPane3;
+    private javax.swing.JScrollPane jScrollPane4;
+    private javax.swing.JLabel labelResults;
+    private javax.swing.JList<String> listCalcReport;
+    private javax.swing.JList<String> listSortReport;
+    private javax.swing.JList<String> listVerifyReport;
+    private javax.swing.JPanel panelReportSection;
+    private javax.swing.JPanel panelResultsContainer;
+    private javax.swing.JTable tableRaceResults;
     // End of variables declaration//GEN-END:variables
+
+    private void showTableResult(ReportStatus sorting) {
+        long errors = 0;
+        Node<Bet> current = sorting == ReportStatus.SORT_HIGH_TO_LOW ? this.bets.getTail() : this.bets.getHead();
+        DefaultTableModel model = (DefaultTableModel) this.tableRaceResults.getModel();
+
+        while (current != null) {
+            if (current.getData().isValid()) {
+                model.addRow(new Object[]{current.getData().getGambler().getName(),
+                    current.getData().getGambler().getPoints(),
+                    current.getData().getHorses()[0],
+                    current.getData().getHorses()[1],
+                    current.getData().getHorses()[2],
+                    current.getData().getHorses()[3],
+                    current.getData().getHorses()[4],
+                    current.getData().getHorses()[5],
+                    current.getData().getHorses()[6],
+                    current.getData().getHorses()[7],
+                    current.getData().getHorses()[8],
+                    current.getData().getHorses()[9]});
+
+            } else {
+                errors++;
+            }
+            current = sorting == ReportStatus.SORT_HIGH_TO_LOW ? current.getNext() : current.getPrevious();
+        }
+
+        if (errors > 0) {
+            this.labelResults.setText("RESULTADOS: " + "Hubieron " + errors + " apuestas no validas, usa EXPORTAR para exportarlos a un CSV");
+        }
+    }
+
+    private void showReports() {
+        Node<Report> current = this.manager.getReportsOK().getTail();
+        // show report for processsing bets
+        DefaultListModel model = new DefaultListModel();
+
+        while (current != null) {
+            if (current.getData().getStatus() == ReportStatus.VALIDATE_BETS) {  
+                
+            }
+            current = current.getNext();
+        }
+    }
 }
