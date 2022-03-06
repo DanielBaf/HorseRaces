@@ -53,7 +53,6 @@ public class ItemRepeatedValidator {
                     addRealSteps(1);
                 }
             } catch (Exception e) {
-                // TODO validate error
                 addRealSteps(1); // error management
             }
             if (values[pos] == toCompare && index < values.length - 1) { // at this point A always is the same as A, so

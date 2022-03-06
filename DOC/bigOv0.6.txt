@@ -1,0 +1,278 @@
+// CALC OF BIG O
+-----------------------------------------------------------------------------------------------------------------------------
+                                                SORT BETS
+-----------------------------------------------------------------------------------------------------------------------------
+
+public void sortByGambler(NodeList list) {                                          // O(n) FOR SORT BY GAMBLER
+    Node current = list.getTail();                                                  // ASSIGN = 1
+    while (current != null) {                                                       // WHILE = n
+        Node comparing = current;                                                   // ASSIGN = 1
+        while (comparing != null) {                                                 // WHILE = n
+            if (comparing.getData().getGambler().getName()                          // COMPARE = 1
+                    .compareTo(current.getData().getGambler().getName()) > 0) {     
+                Bet tmp = comparing.getData();                                      // ASSIGN = 1
+                comparing.setData(current.getData());                               // ASSIGN = 1
+                current.setData(tmp);                                               // ASSIGN = 1
+            }
+            comparing = comparing.getNext();                                        // ASSIGN  = 1
+        }
+        current = current.getNext();                                                // ASSIGN = 1
+    }
+}
+
+O(n) = 1 + (n)*(1 + n + 1 + 1 + 1 + 1)
+0(n) = 1 + n * n
+O(n) = 1 + n^2
+O(n) = n^2                                  // EXPECTED COMPLEX
+
+public void sortByPoints(NodeList list) {                                           // O(n) FOR SORT BY POINTS
+    Node current = list.getTail();                                                  // ASSIGN = 1
+    while (current != null) {                                                       // WHILE = n
+        Node comparing = current;                                                   // ASSIGN = 1
+        while (comparing != null) {                                                 // WHILE = n
+            if (comparing.getData().getGambler().getPoints()                        // IF = 1
+                    > current.getData().getGambler().getPoints()) {
+                Bet tmp = comparing.getData();                                      // ASSIGN = 1
+                comparing.setData(current.getData());                               // ASSIGN = 1
+                current.setData(tmp);                                               // ASSIGN = 1
+            }
+            comparing = comparing.getNext();                                        // ASSIGN = 1
+        }
+        current = current.getNext();                                                // ASSIGN = 1
+    }
+}
+
+O(n) = 1 + (n)*(1 + n + 1 + 1 + 1 + 1)
+0(n) = 1 + n * n
+O(n) = 1 + n^2
+O(n) = n^2                                  // EXPECTED COMPLEX
+
+-----------------------------------------------------------------------------------------------------------------------------
+                                                VALIDATE BETS
+-----------------------------------------------------------------------------------------------------------------------------
+
+COMPLEX = VALIDATE_BETS_COMPLES + VALIDATE_COMPLEX + IS_STRING_DEC_COMPLEX 
+
+-------> VALIDATE_BETS_COMPLES
+
+public void validateBets(NodeList bets) {
+    validate(bets.getTail());               // CALL = 1
+}
+
+VALIDATE_BETS_COMPLES = 1
+
+-------> VALIDATE_COMPLEX
+
+private void validate(Node next) {
+    next.getData().setValid(this.repeatValidator.isStringRepeated(next.getData().getHorses()));
+    if (next.getNext() == null) { // end of list
+        return;
+    } else {
+        validate(next.getNext());
+    }
+}
+
+Talla                           n
+Base case(n=0)                  T(n)=1
+General case(n>0)               T(n)=1 + T(n-1)
+Recurrency ecc: 
+
+                        T(n) =  1            n = 0
+                                1 + T(n-1)   n > 0
+
+
+    -> recurrency deploy
+
+        T(n) =  1            n = 0
+                1 + T(n-1)   n > 0
+
+        T(n)= 1 + T(n-1)
+            = 1 + (1 + T(n-2)) = 2 + T(n-2)
+            = 2 + (1 + T(n-3)) = 3 + T(n-3)
+            = ...
+            = i + T(n-i)
+
+at last call n - i = 0 <-> i = n -> T(n) = n + T(0) = n + 1
+
+T(n) = n + 1
+T(n) ∈ Q(n)
+
+VALIDATE_COMPLEX = n + 1
+
+-------> IS_STRING_DEC_COMPLEX                  Complexity for validate bets
+
+public boolean isStringRepeated(String[] values) {
+    if (values.length != 10) {                                          // COMPARE = 1
+        return false;                                                   // RETURN = 1
+    } else {                                                            
+        stringDeclared(values, 0, values[values.length - 1], 0);        // CALL = ?
+        boolean tmp = this.isValid;                                     // ASSIGN = 1
+        this.isValid = true;                                            // ASSIGN = 1
+        return tmp;                                                     // RETURN  = 1
+    }
+}
+
+IS_STRING_DEC_COMPLEX = 1 + 1 + ? + 1 + 1
+IS_STRING_DEC_COMPLEX = ? // the worst case is ?, otherwise use 1
+
+
+public String stringDeclared(String[] values, int pos, String toCompare, int index) {
+    // end of recursivity
+    if (index >= values.length - 1) {                                                               // IF MATH = 1
+        return values[pos];                                                                         // RETURN = 1
+    }
+
+    try {                                                                                           // TRY = 1
+        // validate if the actual char to compare is the last in the array
+        if (pos >= values.length - index - 1) {                                                     // COMP SUBS = 1
+            pos = 0; // reset the position                                                          // ASIGN = 1
+            index++; // increases the group index analyzed                                          // INCREASE = 1
+            toCompare = values[values.length - index - 1]; // next value to analyze                 // ASIGN SUBS = 1
+        }
+    } catch (Exception e) {
+        System.out.println("Error: " + e.getMessage());                                             // PRINT = 1
+    }
+
+    if (values[pos].equals(toCompare)                                                               // COMP*2 SUBS = 1
+            && index < values.length - 1) { 
+                // at this point A always is the same as A, so
+                // validate index isn't the last
+        this.isValid = false;                                                                       // ASIGN = 1
+    }
+
+    // recursive call
+    return stringDeclared(values, pos + 1, toCompare, index);                                       // RECURSIVE
+}
+
+Talla:              values: n
+Base case:          T(n) = 1
+General case:       T(n) = 1 + T(n + k -l - 1) => pos:k index:l values:n
+Reurrency ecc:
+
+            T(n) =  1                    n = 0
+                    1 + T(n + k -l - 1)  n > 0
+
+    -> recurrency deploy
+
+    T(n) =  1                       n = 0
+            1 + T(n + k - l - 1)    n > 0
+
+    T(n) = 1 + T(n + k - l - 1)    n > 0
+         = 1 + (1 + T(n + k - l - 2)) = 2 + T(n + k - l - 2)
+         = 2 + (1 + T(n + k - l - 3)) = 3 + T(n + k - l - 3)
+         = ...
+         = i + T(n + k - l - i)
+
+         -> at last call n + k -l -i = 0 <=> i + l = n + k -> T(n) = n + T(0) = n + 1
+
+            T(n) = n + 1
+            T(n) ∈ Q(n)
+
+? = IS_STRING_DEC_COMPLEX
+RESULT = n + 1 + n + 1
+RESULT = n
+        Q(n) = n                    // EXPECTED COMPLEX
+
+-----------------------------------------------------------------------------------------------------------------------------
+                                                CALCULATE POINTS
+-----------------------------------------------------------------------------------------------------------------------------
+
+-> CALULCATE_COMPLEX
+
+public void calculate(NodeList list, String[] horsePositions) {
+    calculate(list.getTail(), horsePositions);                      // COMPLEX = ?
+}
+
+O(n) = ?
+
+private void calculate(Node next, String[] horsePositions) {
+    if (next.getNext() == null) {                                   // IF = 1
+        return;                                                     // RETURN = 1
+    } else {
+        setPoints(next.getData(), horsePositions, 0);               // COMPLEX = ?1
+        calculate(next.getNext(), horsePositions);                  // recurrency
+    }
+}
+
+Talla:              values: n
+Base case:          T(n) = 1
+General case:       T(n) = 1 + T(n - 1) => possible next Nodes:n
+Reurrency ecc:
+
+            T(n) =  1                    n = 0
+                    1 + T(n - 1)  n > 0
+
+    -> recurrency deploy
+
+    T(n) =  1               n = 0
+            1 + T(n - 1)    n > 0
+
+    T(n) = 1 + T(n - 1)    n > 0
+         = 1 + (1 + T(n - 2)) = 2 + T(n - 2)
+         = 2 + (1 + T(n - 3)) = 3 + T(n - 3)
+         = ...
+         = i + T(n - i)
+
+         -> at last call n - i = 0 <=> i = n -> T(n) = n + T(0) = n + 1
+
+            T(n) = n + 1
+            T(n) ∈ Q(n)
+Q(n) = n + ?1
+
+private void setPoints(Bet next, String[] horsePositions, int index) {
+    if (next.getHorses()[index].equals(horsePositions[index])) {                    
+        next.getGambler().setPoints(next.getGambler().getPoints() + 10 - index);    
+    }
+    if (index == next.getHorses().length - 1) {
+        return;
+    } else {
+        index++;
+        setPoints(next, horsePositions, index);
+    }
+}
+
+Talla:              values: n
+Base case:          T(n) = 1
+General case:       T(n) = 1 + T(n - 1) => possible next Nodes:n
+Reurrency ecc:
+
+            T(n) =  1                    n = 0
+                    1 + T(n - 1)  n > 0
+
+    -> recurrency deploy
+
+    T(n) =  1               n = 0
+            1 + T(n - 1)    n > 0
+
+    T(n) = 1 + T(n - 1)    n > 0
+         = 1 + (1 + T(n - 2)) = 2 + T(n - 2)
+         = 2 + (1 + T(n - 3)) = 3 + T(n - 3)
+         = ...
+         = i + T(n - i)
+
+         -> at last call n - i = 0 <=> i = n -> T(n) = n + T(0) = n + 1
+
+            T(n) = n + 1
+            T(n) ∈ Q(n)
+
+?1 + ?2 = CALULCATE_COMPLEX
+CALULCATE_COMPLEX = n + n + 1
+CALULCATE_COMPLEX = n
+        Q(n) = n   
+
+
+////////////////////////////////////////////////////////////////////////////////////////////////////
+                                        INSERT BET
+////////////////////////////////////////////////////////////////////////////////////////////////////
+public void addAtHead(T data) {
+       if (isEmpty()) { //          IF = 1 step
+           head = tail = new Node<T>(data); // 2 steps, declaration and initializations
+       } else {
+           head = new Node<T>(data, null, this.head); // 1 step, delcaration and initizlization
+           head.getPrevious().setNext(head); // 1 step, set previous node's next to new node
+       }
+       this.size++;
+}
+
+O(n) = 1 + 2 + 1 + 1 + 1
+0(n) = 1

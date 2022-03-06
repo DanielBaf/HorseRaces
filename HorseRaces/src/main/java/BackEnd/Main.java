@@ -11,6 +11,5 @@ public class Main {
         // fullscreen
         view.setLocationRelativeTo(null);
         view.setVisible(true);
-
     }
 }
