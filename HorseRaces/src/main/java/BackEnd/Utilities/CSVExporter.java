@@ -13,6 +13,7 @@ import java.io.FileWriter;
 
 import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
+import javax.swing.filechooser.FileNameExtensionFilter;
 
 /**
  *
@@ -26,13 +27,16 @@ public class CSVExporter {
             JOptionPane.showMessageDialog(null,
                     "No se puede guardar el archivo en la ruta especificada, si quieres volver a exportar los archivos vuelve a correr el analisis");
         } else {
-            writeToFile(bets, path + ".csv", exportValids);
+            path = path.endsWith(".csv") ? path : path + ".csv";
+            writeToFile(bets, path, exportValids);
         }
     }
 
     private String getPath() {
         try {
             JFileChooser fChooser = new JFileChooser();
+            FileNameExtensionFilter filter = new FileNameExtensionFilter("Archivos CSV", "csv");
+            fChooser.setFileFilter(filter);
             fChooser.showSaveDialog(null);
             File file = fChooser.getSelectedFile();
             return file.getAbsolutePath();

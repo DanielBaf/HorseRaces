@@ -16,6 +16,7 @@ public class ResBoardCalculator {
     private long mostSteps;
     private int stepLoop = 0;
     private int realStepLoop = 0;
+    private boolean error;
 
     public ResBoardCalculator() {
         this.timer = new Timer();
@@ -27,43 +28,52 @@ public class ResBoardCalculator {
      * positon, if Gambler guesses correctly the 1st horse gains 10 points, if
      * guesses correctly the 2nd horse wins
      *
-     * @param bets the NodeList of bets to analyze
+     * @param bets           the NodeList of bets to analyze
      * @param horsesPosition the name of the horses sorted by positon from 1st
-     * to last
+     *                       to last
      * @return
      */
     public ReportStatus calculate(NodeList<Bet> list, int[] horsePositions) {
         // variables
-        boolean error = false;
-        Node<Bet> current = list.getTail();
         resetSteps();
+        calculateSub(list.getTail(), horsePositions);
+        this.steps = this.steps / list.getSize();
+        this.realSteps = this.realSteps / list.getSize();
+        this.time = this.time / list.getSize();
+        return this.error ? ReportStatus.FAILURE : ReportStatus.SUCCESS;
 
-        while (current != null) {
+    }
+
+    /**
+     * Submethod to calculate the points of the bets
+     * 
+     * @param next           the next bet to analyze
+     * @param horsePositions the horses podium
+     */
+    private void calculateSub(Node<Bet> next, int[] horsePositions) {
+        if (next == null) {
+            // end
+        } else {
+            // action
             this.timer.run();
             this.stepLoop++;
             this.realStepLoop += 2;
             try {
-                if (current.getData().isValid()) {
-                    setPoints(current.getData(), horsePositions, 0);
+                if (next.getData().isValid()) {
+                    setPoints(next.getData(), horsePositions, 0);
                 }
             } catch (Exception e) {
-                error = true;
+                this.error = true;
                 realStepLoop++;
             }
             this.timer.stopTimer();
             this.time += this.timer.getTotalTime();
             calcMostLessSteps(stepLoop);
             addSteps(stepLoop, realStepLoop);// run timer, if, stop timer, get time, return
-            current = current.getNext();
             this.stepLoop = 0; // reset loop vals
             this.realStepLoop = 0;
+            calculateSub(next.getNext(), horsePositions); // recursive call
         }
-        // promedium
-        this.steps = this.steps / list.getSize();
-        this.realSteps = this.realSteps / list.getSize();
-        this.time = this.time / list.getSize();
-        return error ? ReportStatus.FAILURE : ReportStatus.SUCCESS;
-
     }
 
     /**
@@ -119,6 +129,7 @@ public class ResBoardCalculator {
     private void resetSteps() {
         this.steps = 0;
         this.realSteps = 0;
+        this.error = false;
     }
 
     private void calcMostLessSteps(int steps) {

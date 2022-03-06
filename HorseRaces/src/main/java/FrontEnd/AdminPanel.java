@@ -20,7 +20,7 @@ import javax.swing.table.DefaultTableModel;
  *
  * @author jefemayoneso
  */
-public class MainView1 extends javax.swing.JFrame {
+public class AdminPanel extends javax.swing.JFrame {
 
     private int[] horsePodium;
     private MainViewController controller;
@@ -30,7 +30,7 @@ public class MainView1 extends javax.swing.JFrame {
     /**
      * Creates new form MainView1
      */
-    public MainView1() {
+    public AdminPanel() {
         initComponents();
         initVars();
     }
@@ -789,6 +789,7 @@ public class MainView1 extends javax.swing.JFrame {
     // End of variables declaration//GEN-END:variables
 
     private void initVars() {
+        this.setTitle("Panel de administración");
         this.horsePodium = new int[10];
         this.controller = new MainViewController();
         this.newHorsesBet = new int[10];

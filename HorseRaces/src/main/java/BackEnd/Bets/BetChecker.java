@@ -19,6 +19,8 @@ public class BetChecker {
     private int realStepsByLoop;
     private long lessSteps;
     private long mostSteps;
+    private int noValids;
+    private boolean error;
 
     MainViewController controller;
 
@@ -41,29 +43,37 @@ public class BetChecker {
         // actions
         resetSteps(); // reset vals for report
         // varibales
-        int noValids = 0;
-        boolean error = false;
-        Node<Bet> current = bets.getTail();
-        // start validating each bet
-        while (current != null) {
-            int status = validate(current);
-            // if the bet is valid, the info of the bet is stored in the bet
-            if (status == 1) {
-                noValids++;
-            } else if (status == -1) {
-                error = true;
-            }
-            // save info for report and move into array
-            current = current.getNext();
-            // step section -> add the steps into the method validate
-            calcMostLessSteps();
-            addSteps(this.stepsByLoop, this.realStepsByLoop);
-        }
+        validateSub(bets.getTail());
         // create a promedium
         this.time = this.time / bets.getSize();
         this.steps = this.steps / bets.getSize();
         this.realSteps = this.realSteps / bets.getSize();
-        return error ? ReportStatus.FAILURE : (noValids > 0 ? ReportStatus.SOME_BETS_INVALID : ReportStatus.SUCCESS);
+        return this.error ? ReportStatus.FAILURE
+                : (this.noValids > 0 ? ReportStatus.SOME_BETS_INVALID : ReportStatus.SUCCESS);
+    }
+
+    /**
+     * Submethdo to validate all bets 1 by 1 recursively
+     * 
+     * @param next the node to validate
+     */
+    private void validateSub(Node<Bet> next) {
+        if (next == null) {
+            // end
+        } else {
+            int status = validate(next);
+            // if the bet is valid, the info of the bet is stored in the bet
+            if (status == 1) {
+                this.noValids++;
+            } else if (status == -1) {
+                this.error = true;
+            }
+            // step section -> add the steps into the method validate
+            calcMostLessSteps();
+            addSteps(this.stepsByLoop, this.realStepsByLoop);
+            // recursivity
+            validateSub(next.getNext());
+        }
     }
 
     /**
@@ -125,6 +135,8 @@ public class BetChecker {
         this.lessSteps = 0;
         this.stepsByLoop = 0;
         this.realStepsByLoop = 0;
+        this.noValids = 0;
+        this.error = false;
     }
 
     /**
