@@ -27,9 +27,9 @@ public class ResBoardCalculator {
      * positon, if Gambler guesses correctly the 1st horse gains 10 points, if
      * guesses correctly the 2nd horse wins
      *
-     * @param bets           the NodeList of bets to analyze
+     * @param bets the NodeList of bets to analyze
      * @param horsesPosition the name of the horses sorted by positon from 1st
-     *                       to last
+     * to last
      * @return
      */
     public ReportStatus calculate(NodeList<Bet> list, int[] horsePositions) {
@@ -43,7 +43,9 @@ public class ResBoardCalculator {
             this.stepLoop++;
             this.realStepLoop += 2;
             try {
-                setPoints(current.getData(), horsePositions, 0);
+                if (current.getData().isValid()) {
+                    setPoints(current.getData(), horsePositions, 0);
+                }
             } catch (Exception e) {
                 error = true;
                 realStepLoop++;

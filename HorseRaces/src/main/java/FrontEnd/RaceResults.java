@@ -11,6 +11,8 @@ import BackEnd.Objects.List.NodeList;
 import BackEnd.Reports.Report;
 import BackEnd.Reports.ReportManager;
 import BackEnd.Reports.ReportStatus;
+import BackEnd.Utilities.CSVExporter;
+import Controller.ResultsController;
 import javax.swing.DefaultListModel;
 import javax.swing.table.DefaultTableModel;
 
@@ -22,6 +24,7 @@ public class RaceResults extends javax.swing.JFrame {
 
     private final ReportManager manager;
     private final NodeList<Bet> bets;
+    private final ResultsController controller;
 
     /**
      * Creates new form RaceResults
@@ -30,6 +33,7 @@ public class RaceResults extends javax.swing.JFrame {
         initComponents();
         this.bets = bets;
         this.manager = manager;
+        this.controller = new ResultsController();
 
         showTableResult(sorting);
         showReports();
@@ -115,6 +119,11 @@ public class RaceResults extends javax.swing.JFrame {
         }
 
         jButton1.setText("EXPORTAR");
+        jButton1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton1ActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanel5Layout = new javax.swing.GroupLayout(jPanel5);
         jPanel5.setLayout(jPanel5Layout);
@@ -271,6 +280,11 @@ public class RaceResults extends javax.swing.JFrame {
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
+
+    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+        CSVExporter csvE = new CSVExporter();
+        csvE.exportCSV(true, this.bets);
+    }//GEN-LAST:event_jButton1ActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton jButton1;

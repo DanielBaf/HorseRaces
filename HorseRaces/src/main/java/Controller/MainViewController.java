@@ -10,6 +10,7 @@ import BackEnd.Reports.ReportStatus;
 import BackEnd.Utilities.CSVExporter;
 import BackEnd.Utilities.FileAnalyzer;
 import BackEnd.Utilities.Sorter;
+import javax.swing.JOptionPane;
 
 public class MainViewController {
 
@@ -42,8 +43,9 @@ public class MainViewController {
                     this.betChecker.getMostSteps(), this.betChecker.getLessSteps()));
             // export no valids to CSV
             if (tmp == ReportStatus.SOME_BETS_INVALID) {
+                JOptionPane.showMessageDialog(null, "Algunas apuestas son invalidas\nPor favor selecciona un archivo para exportar las apuestas invalidas");
                 CSVExporter csvE = new CSVExporter();
-                csvE.exportInvalidBets(this.bets);
+                csvE.exportCSV(false, this.bets);
             }
             return tmp;
         } else {

@@ -20,15 +20,13 @@ import javax.swing.JOptionPane;
  */
 public class CSVExporter {
 
-    public void exportInvalidBets(NodeList<Bet> bets) {
-        JOptionPane.showMessageDialog(null,
-                "Algunas apuestas fueron invalidas, por favor elige dònde exportar el archivo");
+    public void exportCSV(boolean exportValids, NodeList<Bet> bets) {
         String path = getPath();
         if (path == null) {
             JOptionPane.showMessageDialog(null,
                     "No se puede guardar el archivo en la ruta especificada, si quieres volver a exportar los archivos vuelve a correr el analisis");
         } else {
-            writeToFile(bets, path + ".csv");
+            writeToFile(bets, path + ".csv", exportValids);
         }
     }
 
@@ -44,7 +42,7 @@ public class CSVExporter {
 
     }
 
-    private void writeToFile(NodeList<Bet> bets, String path) {
+    private void writeToFile(NodeList<Bet> bets, String path, boolean exportValids) {
         try {
             File file = new File(path);
             FileWriter writer;
@@ -55,7 +53,7 @@ public class CSVExporter {
 
             writer = new FileWriter(file);
             while (current != null) {
-                if (!current.getData().isValid()) {
+                if (current.getData().isValid() == exportValids) {
                     String horses = "";
                     for (int i = 0; i < current.getData().getHorses().length; i++) {
                         horses += "," + current.getData().getHorses()[i];

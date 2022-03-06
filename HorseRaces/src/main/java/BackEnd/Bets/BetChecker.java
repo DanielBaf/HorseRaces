@@ -83,6 +83,9 @@ public class BetChecker {
                 current.getData().setValid(false);
                 valid = 1;
                 addSteps(0, 1);
+            } else if (current.getData().getGambler().getName().isEmpty()
+                    || current.getData().getGambler().getName().isBlank()) {
+                valid = 1;
             } else {
                 current.getData().setValid(this.repeatValidator.isNumRepeat(current.getData().getHorses()));
                 if (!current.getData().isValid()) {

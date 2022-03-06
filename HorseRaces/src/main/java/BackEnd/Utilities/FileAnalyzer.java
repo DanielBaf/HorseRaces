@@ -31,16 +31,18 @@ public class FileAnalyzer {
     private void saveDataFromVector(String[] data, NodeList<Bet> list) {
         try {
             Gambler gambler = new Gambler(data[0].trim()); // always the 1st val is the name
-            Double ammount = Double.valueOf(data[1].trim()); // always the 2nd val is the ammount
-            int[] horses = new int[10]; // there must be 10 horses\
+            Double ammount = data.length - 1 > 0 ? Double.valueOf(data[1].trim()) : 0; // always the 2nd val is the ammount
+            int horsesLength = data.length - 2 < 0 ? (data.length - 1 < 0 ? 0 : data.length - 1) : data.length - 2;
+            int[] horses = new int[horsesLength]; // there must be 10 horses\
             for (int i = 0; i < data.length - 2; i++) {
                 try {
                     horses[i] = Integer.valueOf(data[i + 2].trim());
-                } catch (Exception e) {
+                } catch (NumberFormatException e) {
+                    horses[i] = -1;
                 }
             }
             list.addAtHead(new Bet(gambler, ammount, horses));
-        } catch (Exception e) {
+        } catch (NumberFormatException e) {
             System.out.println("Error in saveDataFromVector " + e.getMessage());
         }
     }

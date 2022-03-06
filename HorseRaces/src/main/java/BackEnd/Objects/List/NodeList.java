@@ -56,14 +56,15 @@ public class NodeList<T> {
      *
      */
     public T deleteFromTail() {
-        T bet = this.tail.getData();
+        T data = this.tail.getData();
         if (this.tail == this.head) {
             this.tail = this.head = null;
         } else {
             this.tail = this.tail.getNext();
+            this.tail.setPrevious(null);
         }
         this.size--;
-        return bet;
+        return data;
     }
 
     /**
@@ -72,19 +73,15 @@ public class NodeList<T> {
      * @return
      */
     public T deleteFromHead() {
-        T bet = this.head.getData();
+        T data = this.head.getData();
         if (this.tail == this.head) {
             this.tail = this.head = null;
         } else {
-            Node<T> current = this.tail;
-            while (current.getNext() != null) {
-                current = current.getNext();
-            }
-            this.head = current;
+            this.head = this.head.getPrevious();
             this.head.setNext(null);
         }
         this.size--;
-        return bet;
+        return data;
     }
 
     /**
