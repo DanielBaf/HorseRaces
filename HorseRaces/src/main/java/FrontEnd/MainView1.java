@@ -105,6 +105,7 @@ public class MainView1 extends javax.swing.JFrame {
         jMenu5 = new javax.swing.JMenu();
         menuItemSortBetsByName = new javax.swing.JMenuItem();
         menuItemSortBetByPoints = new javax.swing.JMenuItem();
+        jMenuItem1 = new javax.swing.JMenuItem();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -527,6 +528,14 @@ public class MainView1 extends javax.swing.JFrame {
 
         jMenu4.add(jMenu5);
 
+        jMenuItem1.setText("Nueva apuesta");
+        jMenuItem1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItem1ActionPerformed(evt);
+            }
+        });
+        jMenu4.add(jMenuItem1);
+
         jMenuBar1.add(jMenu4);
 
         setJMenuBar(jMenuBar1);
@@ -605,6 +614,12 @@ public class MainView1 extends javax.swing.JFrame {
         this.counter = 0;
     }//GEN-LAST:event_buttonCleanNewBetActionPerformed
 
+    private void jMenuItem1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem1ActionPerformed
+        buttonCleanNewBetActionPerformed(evt);
+        buttonCleanResultListActionPerformed(evt);
+        this.controller.resetBet();
+    }//GEN-LAST:event_jMenuItem1ActionPerformed
+
     private void menuItemValidateBetsActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_menuItemValidateBetsActionPerformed
         ReportStatus status = this.controller.validateBets();
         if (status == ReportStatus.SUCCESS) {
@@ -681,6 +696,7 @@ public class MainView1 extends javax.swing.JFrame {
                     RaceResults rr = new RaceResults(this.controller.getBets(), this.controller.getReportManager(), sortBy);
                     rr.setLocationRelativeTo(null);
                     rr.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
+                    rr.setResizable(false);
                     rr.setVisible(true);
                 } else {
                     showMessage(status);
@@ -731,6 +747,7 @@ public class MainView1 extends javax.swing.JFrame {
     private javax.swing.JMenu jMenu4;
     private javax.swing.JMenu jMenu5;
     private javax.swing.JMenuBar jMenuBar1;
+    private javax.swing.JMenuItem jMenuItem1;
     private javax.swing.JMenuItem jMenuUploadFile;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;

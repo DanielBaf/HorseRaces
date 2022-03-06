@@ -14,7 +14,7 @@ import BackEnd.Utilities.Sorter;
 public class MainViewController {
 
     private final FileAnalyzer fileAnalyzer;
-    private final NodeList<Bet> bets;
+    private NodeList<Bet> bets;
     private final BetChecker betChecker;
     private final ResBoardCalculator betCalculator;
     private final Sorter sorter;
@@ -35,9 +35,11 @@ public class MainViewController {
      * @return
      */
     public ReportStatus validateBets() {
-        if (!this.bets.isEmpty()) {
-            ReportStatus tmp = this.betChecker.validateBets(this.bets);
-            this.reportManager.addReport(new Report(this.betChecker.getTime(), this.betChecker.getSteps(), this.betChecker.getRealSteps(), ReportStatus.VALIDATE_BETS));
+        if (!this.bets.isEmpty()) { // if there are bets
+            ReportStatus tmp = this.betChecker.validateBets(this.bets); // validate and add report
+            this.reportManager.addReport(new Report(this.betChecker.getTime(), this.betChecker.getSteps(),
+                    this.betChecker.getRealSteps(), ReportStatus.VALIDATE_BETS,
+                    this.betChecker.getMostSteps(), this.betChecker.getLessSteps()));
             // export no valids to CSV
             if (tmp == ReportStatus.SOME_BETS_INVALID) {
                 CSVExporter csvE = new CSVExporter();
@@ -56,8 +58,8 @@ public class MainViewController {
      * @return
      */
     public ReportStatus sortBets(ReportStatus status) {
-        if (!this.bets.isEmpty()) {
-            ReportStatus tmp = switch (status) {
+        if (!this.bets.isEmpty()) { // if there are bets
+            ReportStatus tmp = switch (status) { // sort
                 case SORT_BY_NAME ->
                     this.sorter.sortByGambler(this.bets);
                 case SORT_BY_POINTS ->
@@ -65,13 +67,18 @@ public class MainViewController {
                 default ->
                     ReportStatus.UNKNOWN_ACTION;
             };
-            if (tmp != ReportStatus.FAILURE && tmp != ReportStatus.UNKNOWN_ACTION) {
-                this.reportManager.addReport(new Report(this.sorter.getTime(), this.sorter.getSteps(), this.sorter.getRealSteps(), status));
+            if (tmp != ReportStatus.FAILURE && tmp != ReportStatus.UNKNOWN_ACTION) { // add report if success
+                this.reportManager.addReport(new Report(this.sorter.getTime(), this.sorter.getSteps(),
+                        this.sorter.getRealSteps(), status, this.sorter.getMostSteps(), this.sorter.getLessSteps()));
             }
             return tmp;
         } else {
             return ReportStatus.LIST_EMPTY;
         }
+    }
+
+    public ReportStatus calculatePoints() {
+        return null;
     }
 
     /**
@@ -85,14 +92,16 @@ public class MainViewController {
     }
 
     public ReportStatus processRace(ReportStatus sort, int[] horsesPodium) {
-        ReportStatus status = validateBets();
-        if (status == ReportStatus.SUCCESS || status == ReportStatus.SOME_BETS_INVALID) {// verify bets
+        ReportStatus status = validateBets(); // 1st step is validate bets
+        if (status == ReportStatus.SUCCESS || status == ReportStatus.SOME_BETS_INVALID) {
             status = this.betCalculator.calculate(this.bets, horsesPodium);
-            if (status == ReportStatus.SUCCESS) { // calculate points
+            if (status == ReportStatus.SUCCESS) { // 2nd step is calculate bets points
                 status = sortBets(sort);
-                if (status == ReportStatus.SUCCESS) { // well sorted
-                    // info ready to be shown in frontend
-                    this.reportManager.addReport(new Report(this.betCalculator.getTime(), this.betCalculator.getSteps(), this.betCalculator.getRealSteps(), ReportStatus.CALCULATE_POINTS));
+                if (status == ReportStatus.SUCCESS) { // 3rd step is sort bets
+                    // info ready to be shown in frontend, add report of sortgin
+                    this.reportManager.addReport(new Report(this.betCalculator.getTime(), this.betCalculator.getSteps(),
+                            this.betCalculator.getRealSteps(), ReportStatus.CALCULATE_POINTS,
+                            this.betCalculator.getMostSteps(), this.betCalculator.getLessSteps()));
                     return ReportStatus.SUCCESS;
                 }
                 return status;
@@ -118,6 +127,10 @@ public class MainViewController {
 
     public NodeList<Bet> getBets() {
         return this.bets;
+    }
+
+    public void resetBet() {
+        this.bets = new NodeList<>();
     }
 
 }

@@ -12,6 +12,8 @@ public class Sorter {
     private long time;
     private long steps;
     private long realSteps;
+    private long lessSteps;
+    private long mostSteps;
 
     public Sorter() {
         this.timer = new Timer();
@@ -72,30 +74,34 @@ public class Sorter {
         try {
             this.timer.run();
             Node<Bet> current = list.getTail();
+            // loop for item
             while (current != null) {
-                addSteps(1, 2);
+                int stepByLoop = 1;
+                int realStepByLoop = 2;        
                 Node<Bet> comparing = current;
                 while (comparing != null) {
-                    addSteps(1, 1);
+                    stepByLoop++;
+                    realStepByLoop++;
                     if (((Bet) comparing.getData()).getGambler().getPoints() > current.getData().getGambler()
                             .getPoints()) {
                         Bet tmp = (Bet) comparing.getData();
                         comparing.setData(current.getData());
                         current.setData(tmp);
-                        addRealSteps(4);
+                        realStepByLoop += 4;
                     }
                     comparing = comparing.getNext();
-                    addRealSteps(1);
+                    realStepByLoop++;
                 }
                 current = current.getNext();
-                addRealSteps(1);
+                calcMostLessSteps(stepByLoop);
+                addSteps(stepByLoop, realStepByLoop);
             }
             this.timer.stopTimer();
             this.time = this.timer.getTotalTime();
             // promedium
             this.steps = this.steps / list.getSize();
             this.realSteps = this.realSteps / list.getSize();
-            addSteps(1, 5);
+            addSteps(1, 4);
             return ReportStatus.SUCCESS;
         } catch (Exception e) {
             return ReportStatus.FAILURE;
@@ -104,7 +110,7 @@ public class Sorter {
     }
 
     public long getTime() {
-        return this.time;
+        return time;
     }
 
     public long getSteps() {
@@ -113,6 +119,14 @@ public class Sorter {
 
     public long getRealSteps() {
         return realSteps;
+    }
+
+    public long getLessSteps() {
+        return lessSteps;
+    }
+
+    public long getMostSteps() {
+        return mostSteps;
     }
 
     private void addSteps(long step, long realSteps) {
@@ -127,6 +141,19 @@ public class Sorter {
     private void resetSteps() {
         this.steps = 0;
         this.realSteps = 0;
+        this.lessSteps = 0;
+        this.mostSteps = 0;
     }
 
+    private void calcMostLessSteps(int steps) {
+        if (this.mostSteps == this.lessSteps && this.mostSteps == 0) {
+            this.mostSteps = this.lessSteps = steps;
+        } else {
+            if (steps > this.mostSteps) {
+                this.mostSteps = steps;
+            } else if (steps < this.lessSteps) {
+                this.lessSteps = steps;
+            }
+        }
+    }
 }
